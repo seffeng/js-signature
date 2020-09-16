@@ -1,0 +1,27 @@
+{
+  "name": "js-signature",
+  "version": "0.1.1",
+  "description": "js-signature, laravel-signature",
+  "main": "src/js-signature.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "signature",
+    "seffeng"
+  ],
+  "author": {
+    "name": "seffeng",
+    "email": "save.zxf@gmail.com"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "license": "MIT",
+  "deprecated": false,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/seffeng/js-signature.git"
+  }
+}
