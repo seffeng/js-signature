@@ -17,6 +17,10 @@ Object.defineProperty(exports, '__esModule', {
 });
 
 const JSSignature = {
+  /**
+   *
+   * @param {object} options
+   */
   init: function(options) {
     options = options || {};
     this.uri = '/';
@@ -54,6 +58,10 @@ const JSSignature = {
     this.setHeaderSignatureTag(options.headerSignatureTag);
     this.setHeaderVersion(options.headerVersion);
   },
+  /**
+   *
+   * @param {string} key
+   */
   setKey: function(key) {
     if (typeof key === 'string') {
       this.accessKeyId = key;
@@ -63,6 +71,10 @@ const JSSignature = {
   getKey: function() {
     return this.accessKeyId;
   },
+  /**
+   *
+   * @param {string} secret
+   */
   setSecret: function(secret) {
     if (typeof secret === 'string') {
       this.accessKeySecret = secret;
@@ -72,6 +84,10 @@ const JSSignature = {
   getSecret: function() {
     return this.accessKeySecret;
   },
+  /**
+   *
+   * @param {string} version
+   */
   setVersion: function(version) {
     if (typeof version === 'string') {
       this.version = version;
@@ -81,6 +97,10 @@ const JSSignature = {
   getVersion: function() {
     return this.version;
   },
+  /**
+   *
+   * @param {string} algo
+   */
   setAlgo: function(algo) {
     if (typeof algo === 'string') {
       this.algo = algo;
@@ -90,6 +110,10 @@ const JSSignature = {
   getAlgo: function() {
     return this.algo;
   },
+  /**
+   *
+   * @param {string} prefix
+   */
   setPrefix: function(prefix) {
     if (typeof prefix === 'string') {
       this.prefix = prefix;
@@ -99,6 +123,10 @@ const JSSignature = {
   getPrefix: function() {
     return this.prefix;
   },
+  /**
+   *
+   * @param {string} connector
+   */
   setConnector: function(connector) {
     if (typeof connector === 'string') {
       this.connector = connector;
@@ -108,6 +136,10 @@ const JSSignature = {
   getConnector: function() {
     return this.connector;
   },
+  /**
+   *
+   * @param {string} suffix
+   */
   setSuffix: function(suffix) {
     if (typeof suffix === 'string') {
       this.suffix = suffix;
@@ -117,6 +149,10 @@ const JSSignature = {
   getSuffix: function() {
     return this.suffix;
   },
+  /**
+   *
+   * @param {string} headerAccessKey
+   */
   setHeaderAccessKey: function(headerAccessKey) {
     if (typeof headerAccessKey === 'string') {
       this.headerAccessKey = headerAccessKey;
@@ -126,6 +162,10 @@ const JSSignature = {
   getHeaderAccessKey: function() {
     return this.headerAccessKey;
   },
+  /**
+   *
+   * @param {string} headerTimestamp
+   */
   setHeaderTimestamp: function(headerTimestamp) {
     if (typeof headerTimestamp === 'string') {
       this.headerTimestamp = headerTimestamp;
@@ -135,6 +175,10 @@ const JSSignature = {
   getHeaderTimestamp: function() {
     return this.headerTimestamp;
   },
+  /**
+   *
+   * @param {string} headerSignature
+   */
   setHeaderSignature: function(headerSignature) {
     if (typeof headerSignature === 'string') {
       this.headerSignature = headerSignature;
@@ -144,6 +188,10 @@ const JSSignature = {
   getHeaderSignature: function() {
     return this.headerSignature;
   },
+  /**
+   *
+   * @param {string} headerSignatureTag
+   */
   setHeaderSignatureTag: function(headerSignatureTag) {
     if (typeof headerSignatureTag === 'string') {
       this.headerSignatureTag = headerSignatureTag;
@@ -153,6 +201,10 @@ const JSSignature = {
   getHeaderSignatureTag: function() {
     return this.headerSignatureTag;
   },
+  /**
+   *
+   * @param {string} headerVersion
+   */
   setHeaderVersion: function(headerVersion) {
     if (typeof headerVersion === 'string') {
       this.headerVersion = headerVersion;
@@ -173,6 +225,10 @@ const JSSignature = {
   getSignature: function() {
     return this.signature;
   },
+  /**
+   *
+   * @param {string} params
+   */
   setParams: function(params) {
     if (typeof params === 'object') {
       this.params = params;
@@ -182,20 +238,24 @@ const JSSignature = {
   getParams: function() {
     return this.params;
   },
-  sortObject() {
+  sortObject: function() {
     let str = this.getConnector();
     if (typeof this.params === 'object') {
       const keys = Object.keys(this.params).sort();
       for (var i in keys) {
-        str += encodeURIComponent(keys[i]) + '=' + encodeURIComponent(typeof this.params[keys[i]] === 'object' ? JSON.stringify(this.params[keys[i]]) : this.params[keys[i]]) + this.getConnector();
+        str += this.urlencode(keys[i]) + '=' + this.urlencode(typeof this.params[keys[i]] === 'object' ? JSON.stringify(this.params[keys[i]]) : this.params[keys[i]]) + this.getConnector();
       }
-      const strlen = (this.getConnector().toString()).length;
+      const strlen = (this.getConnector() + '').length;
       if (strlen > 0) {
         str = str.substr(0, str.length - strlen);
       }
       return str;
     }
   },
+  /**
+   *
+   * @param {string} method
+   */
   setMethod: function(method) {
     if (typeof method === 'string') {
       this.method = method.toUpperCase();
@@ -205,6 +265,10 @@ const JSSignature = {
   getMethod: function() {
     return this.method;
   },
+  /**
+   *
+   * @param {string} uri
+   */
   setUri: function(uri) {
     if (typeof uri === 'string') {
       this.uri = uri;
@@ -214,6 +278,12 @@ const JSSignature = {
   getUri: function() {
     return this.uri;
   },
+  /**
+   *
+   * @param {string} uri
+   * @param {string} method
+   * @param {object} params
+   */
   sign: function(uri, method, params) {
     this.setUri(uri);
     this.setMethod(method);
@@ -225,18 +295,36 @@ const JSSignature = {
     this.signature = this.getHeaderSignatureTag() + ' ' + crypto.createHmac(this.getAlgo(), this.getSecret()).update(signstr).digest('base64');
     return this;
   },
-  getTimesamp() {
+  getTimesamp: function() {
     this.timesamp || this.setTimesamp();
     return this.timesamp;
   },
-  setTimesamp(timesamp) {
+  /**
+   *
+   * @param {string|number} timesamp
+   */
+  setTimesamp: function(timesamp) {
     if (typeof timesamp === 'number' || typeof timesamp === 'string') {
-      this.timesamp = timesamp.toString().substr(0, 10);
+      this.timesamp = (timesamp + '').substr(0, 10);
     } else {
       const date = new Date();
-      this.timesamp = date.getTime().toString().substr(0, 10);
+      this.timesamp = (date.getTime() + '').substr(0, 10);
     }
     return this;
+  },
+  /**
+   *
+   * @param {string} url
+   */
+  urlencode: function(url) {
+    return encodeURIComponent(url + '').replace(/\%20/g, "+").replace(/\*/g, "%2A").replace(/~/g, '%7E').replace(/[!'()]/g, escape);
+  },
+  /**
+   *
+   * @param {string} url
+   */
+  urldecode: function(url) {
+    return decodeURIComponent((url + '').replace(/\+/g, '%20')).replace(/%(?![\da-f]{2})/gi, '%25');
   }
 }
 
