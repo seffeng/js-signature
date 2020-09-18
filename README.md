@@ -27,7 +27,7 @@ JSSignature.init({
     secret: 'accessKeySecret'
 })
 // uri，method, params, 也可直接通过 init 设置
-// 注意：参数中的数组或对象，值需为字符串，不能是数组；如：下面的 a 不能是 { aa: 1, bb: 2 }
+// 注意：参数中的数组或对象，值需为字符串，不能是数字
 const headers = JSSignature.setUri('/index').setMethod('GET')
         .setParams({ perPage: 20, page: 1, a: { aa: '1', bb: '2' }}).sign().getHeaders()
 console.log(headers)
@@ -88,8 +88,8 @@ const headers = JSSignature.setUri('/index').setMethod('GET').setTimesamp(160024
 
 ```shell
 # 注意：
-# 1、参数中的数组或对象，值需为字符串，不能是数组；如：下面的 a 不能是 { aa: 1, bb: 2 }
-{ perPage: 20, page: 1, a: { aa: '1', bb: '2' }}
+# 1、参数中的数组或对象，值需为字符串，不能是数组；如：下面的 a 不能是 [1, 2]
+{ perPage: 20, page: 1, a: ['1', '2'] }
 
 # 2、因传递的时间为浏览器端的时间，可能错误；可提示时间错误或通过不签名接口获取服务器时间再使用设置时间戳方法
 ```
