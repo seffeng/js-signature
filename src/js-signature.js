@@ -215,12 +215,12 @@ const JSSignature = {
     return this.headerVersion;
   },
   getHeaders: function() {
-    return {
-      [this.getHeaderAccessKey()]: this.getKey(),
-      [this.getHeaderTimestamp()]: this.getTimesamp(),
-      [this.getHeaderSignature()]: this.getSignature(),
-      [this.getHeaderVersion()]: this.getVersion()
-    };
+    let headers = {}
+    headers[this.getHeaderAccessKey()] = this.getKey()
+    headers[this.getHeaderTimestamp()] = this.getTimesamp()
+    headers[this.getHeaderSignature()] = this.getSignature()
+    headers[this.getHeaderVersion()] = this.getVersion()
+    return headers
   },
   getSignature: function() {
     return this.signature;

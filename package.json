@@ -1,6 +1,6 @@
 {
   "name": "js-signature",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "js-signature, laravel-signature",
   "main": "src/js-signature.js",
   "scripts": {
