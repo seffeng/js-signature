@@ -244,7 +244,7 @@ const JSSignature = {
     if (keys.length > 0) {
       keys = keys.sort();
       for (var i in keys) {
-        str += this.urlencode(keys[i]) + '=' + this.urlencode(typeof this.params[keys[i]] === 'object' ? JSON.stringify(this.params[keys[i]]) : this.params[keys[i]]) + this.getConnector();
+        str += this.urlencode(keys[i]) + '=' + this.urlencode((typeof this.params[keys[i]] === 'number' || typeof this.params[keys[i]] === 'string') ? this.params[keys[i]] : '') + this.getConnector();
       }
       const strlen = (this.getConnector() + '').length;
       if (strlen > 0) {
