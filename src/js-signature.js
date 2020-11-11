@@ -240,8 +240,9 @@ const JSSignature = {
   },
   sortObject: function() {
     let str = this.getConnector();
-    if (typeof this.params === 'object') {
-      const keys = Object.keys(this.params).sort();
+    let keys = typeof this.params === 'object' ? Object.keys(this.params) : []
+    if (keys.length > 0) {
+      keys = keys.sort();
       for (var i in keys) {
         str += this.urlencode(keys[i]) + '=' + this.urlencode(typeof this.params[keys[i]] === 'object' ? JSON.stringify(this.params[keys[i]]) : this.params[keys[i]]) + this.getConnector();
       }
@@ -249,8 +250,8 @@ const JSSignature = {
       if (strlen > 0) {
         str = str.substr(0, str.length - strlen);
       }
-      return str;
     }
+    return str;
   },
   /**
    *
