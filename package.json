@@ -1,6 +1,6 @@
 {
   "name": "js-signature",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "js-signature, laravel-signature",
   "main": "src/js-signature.js",
   "scripts": {
@@ -15,6 +15,7 @@
     "email": "save.zxf@gmail.com"
   },
   "dependencies": {
+    "create-hmac": "^1.1.7"
   },
   "devDependencies": {
   },

@@ -10,13 +10,13 @@
 /* eslint-disable semi */
 'use strict';
 
-const crypto = require('crypto');
+var createHmac = require('create-hmac');
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-const JSSignature = {
+var JSSignature = {
   /**
    *
    * @param {object} options
@@ -215,12 +215,12 @@ const JSSignature = {
     return this.headerVersion;
   },
   getHeaders: function() {
-    let headers = {}
-    headers[this.getHeaderAccessKey()] = this.getKey()
-    headers[this.getHeaderTimestamp()] = this.getTimesamp()
-    headers[this.getHeaderSignature()] = this.getSignature()
-    headers[this.getHeaderVersion()] = this.getVersion()
-    return headers
+    var headers = {};
+    headers[this.getHeaderAccessKey()] = this.getKey();
+    headers[this.getHeaderTimestamp()] = this.getTimesamp();
+    headers[this.getHeaderSignature()] = this.getSignature();
+    headers[this.getHeaderVersion()] = this.getVersion();
+    return headers;
   },
   getSignature: function() {
     return this.signature;
@@ -239,14 +239,14 @@ const JSSignature = {
     return this.params;
   },
   sortObject: function() {
-    let str = this.getConnector();
-    let keys = typeof this.params === 'object' ? Object.keys(this.params) : []
+    var str = this.getConnector();
+    var keys = typeof this.params === 'object' ? Object.keys(this.params) : []
     if (keys.length > 0) {
       keys = keys.sort();
       for (var i in keys) {
         str += this.urlencode(keys[i]) + '=' + this.urlencode((typeof this.params[keys[i]] === 'number' || typeof this.params[keys[i]] === 'string') ? this.params[keys[i]] : '') + this.getConnector();
       }
-      const strlen = (this.getConnector() + '').length;
+      var strlen = (this.getConnector() + '').length;
       if (strlen > 0) {
         str = str.substr(0, str.length - strlen);
       }
@@ -289,11 +289,11 @@ const JSSignature = {
     this.setUri(uri);
     this.setMethod(method);
     this.setParams(params);
-    const signstr = this.getPrefix() + this.getMethod() + this.getConnector() + (this.getVersion() ? (this.getHeaderVersion() + '=' + this.getVersion() + this.getConnector()) : '') +
+    var signstr = this.getPrefix() + this.getMethod() + this.getConnector() + (this.getVersion() ? (this.getHeaderVersion() + '=' + this.getVersion() + this.getConnector()) : '') +
                   this.getUri() + this.getConnector() + this.getHeaderAccessKey() + '=' + this.getKey() + this.getConnector() + this.getHeaderTimestamp() + '=' +
                   this.getTimesamp() + this.sortObject() + this.getSuffix();
 
-    this.signature = this.getHeaderSignatureTag() + ' ' + crypto.createHmac(this.getAlgo(), this.getSecret()).update(signstr).digest('base64');
+    this.signature = this.getHeaderSignatureTag() + ' ' + createHmac(this.getAlgo(), this.getSecret()).update(signstr).digest('base64');
     return this;
   },
   getTimesamp: function() {
@@ -308,7 +308,7 @@ const JSSignature = {
     if (typeof timesamp === 'number' || typeof timesamp === 'string') {
       this.timesamp = (timesamp + '').substr(0, 10);
     } else {
-      const date = new Date();
+      var date = new Date();
       this.timesamp = (date.getTime() + '').substr(0, 10);
     }
     return this;
