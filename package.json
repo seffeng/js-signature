@@ -15,7 +15,7 @@
     "email": "save.zxf@gmail.com"
   },
   "dependencies": {
-    "create-hmac": "^1.1.7"
+    "crypto-js": "^4.1.1"
   },
   "devDependencies": {
   },

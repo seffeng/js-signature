@@ -10,7 +10,7 @@
 /* eslint-disable semi */
 'use strict';
 
-var createHmac = require('create-hmac');
+var CryptoJS = require("crypto-js");
 
 Object.defineProperty(exports, '__esModule', {
   value: true
@@ -33,6 +33,7 @@ var JSSignature = {
     this.accessKeySecret = '';
     this.version = '';
     this.algo = 'sha1';
+    this.debug = false;
     this.prefix = '';
     this.connector = '&';
     this.suffix = '';
@@ -49,6 +50,7 @@ var JSSignature = {
     this.setSecret(options.secret);
     this.setVersion(options.version);
     this.setAlgo(options.algo);
+    this.setDebug(options.debug);
     this.setPrefix(options.prefix);
     this.setConnector(options.connector);
     this.setSuffix(options.suffix);
@@ -108,7 +110,24 @@ var JSSignature = {
     return this;
   },
   getAlgo: function() {
-    return this.algo;
+    var algo = this.algo.toUpperCase();
+    if (!['MD5', 'RIPEMD160', 'SHA1', 'SHA3', 'SHA224', 'SHA256', 'SHA384', 'SHA512'].includes(algo)) {
+      algo = 'SHA1';
+    }
+    return algo;
+  },
+  /**
+   *
+   * @param boolean debug
+   */
+  setDebug: function(debug) {
+    if (typeof debug === 'boolean') {
+      this.debug = debug;
+    }
+    return this;
+  },
+  getDebug: function() {
+    return this.debug;
   },
   /**
    *
@@ -295,7 +314,11 @@ var JSSignature = {
                   this.getUri() + this.getConnector() + this.getHeaderAccessKey() + '=' + this.getKey() + this.getConnector() + this.getHeaderTimestamp() + '=' +
                   this.getTimesamp() + this.sortObject() + this.getSuffix();
 
-    this.signature = this.getHeaderSignatureTag() + ' ' + createHmac(this.getAlgo(), this.getSecret()).update(signstr).digest('base64');
+    var enfun = 'CryptoJS.Hmac' + this.getAlgo();
+    this.signature = this.getHeaderSignatureTag() + ' ' + CryptoJS.enc.Base64.stringify(eval(enfun + '("' + signstr + '","' + this.getSecret() + '")'));
+    if (this.getDebug()) {
+      console.log(signstr, enfun, this.signature);
+    }
     return this;
   },
   getTimesamp: function() {
@@ -308,10 +331,10 @@ var JSSignature = {
    */
   setTimesamp: function(timesamp) {
     if (typeof timesamp === 'number' || typeof timesamp === 'string') {
-      this.timesamp = (timesamp + '').substr(0, 10);
+      this.timesamp = (timesamp + '').slice(0, 10);
     } else {
       var date = new Date();
-      this.timesamp = (date.getTime() + '').substr(0, 10);
+      this.timesamp = (date.getTime() + '').slice(0, 10);
     }
     return this;
   },
